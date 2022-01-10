@@ -1,0 +1,22 @@
+{
+    "name": "francoisvaillant/geolocator",
+    "description": "A simple class using french government API to geolocate Addresses",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Francoisvaillant\\Geolocator\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "François VAILLANT",
+            "email": "frvaillant@gmail.com"
+        }
+    ],
+    "require": {
+        "symfony/http-client": "^5.4"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9"
+    }
+}

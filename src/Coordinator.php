@@ -126,7 +126,4 @@ class Coordinator extends AbstractApiGetter
         return $this->lambertY;
     }
 
-
-
-
 }

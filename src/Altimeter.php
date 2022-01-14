@@ -48,6 +48,9 @@ class Altimeter extends AbstractApiGetter
      */
     public function setUrl($url)
     {
+        if(!filter_var($url, FILTER_VALIDATE_URL)) {
+            throw new \Exception('The URL provided seems not to be a valid URL');
+        }
         $this->url = $url;
     }
 

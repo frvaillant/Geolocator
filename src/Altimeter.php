@@ -6,7 +6,7 @@ namespace Francoisvaillant\Geolocator;
 
 use Symfony\Component\HttpClient\HttpClient;
 
-class Altimeter extends AbstractApiGetter
+class Altimeter extends ApiGetter
 {
 
     /**
@@ -18,7 +18,6 @@ class Altimeter extends AbstractApiGetter
 
     protected $url = 'https://api.opentopodata.org/v1/test-dataset?locations=%s,%s';
 
-
     /** @var float */
     protected $latitude = null;
 
@@ -27,6 +26,7 @@ class Altimeter extends AbstractApiGetter
 
     /** @var integer */
     protected $altitude  = null;
+
 
     public function __construct(float $latitude, float $longitude)
     {
@@ -81,10 +81,9 @@ class Altimeter extends AbstractApiGetter
      */
     public function getAltitude(): ?int
     {
+        $this->findAltitude();
         return $this->altitude;
     }
-
-
 
 
     /**

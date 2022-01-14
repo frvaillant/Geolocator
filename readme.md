@@ -8,45 +8,60 @@ https://adresse.data.gouv.fr/api-doc/adresse
 composer require francoisvaillant/geolocator
 ```
 
+## All begin by a place
+```PHP
+$place = new \Francoisvaillant\Geolocator\Place()
+```
+
 ## Get Coordinates from address
 
 ```PHP
-$coordinator = new francoisvaillant\geolocator\Coordinator('116 avenue du Président Kennedy','PARIS', 75016);
-$coordinates = $coordinator->getCoordinates();
-/*
-this returns an array like
-    [
-        "latitude"  => 48.852149,
-        "longitude" => 2.279529,
-    ]
- */
+$place
+    ->setAddress('your address');
+    ->setCity('city name');
+    ->setZipCode(00000); // optionnal but recommended
+    ->geolocate();
+
+$latitude  = $place->getLatitude();
+$longitude = $place->getLongitude();
+
 ```
 
 ## Get address from coordinates
 ```PHP
-$PlaceInformator = new francoisvaillant\geolocator\PlaceInformator([2.279529, 48.852149]);
-$placeInformations = $PlaceInformator->getCityInfos();
-/*
-this returns an array like
-    [
-    "address" => "116 Avenue du Président Kennedy",
-    "postCode" => "75016",
-    "city" => "Paris",
-    "inseeCode" => "75116",
-    "departmentCode" => "75",
-    "departmentName" => "Paris",
-    "regionName" => "Île-de-France",
-    ]
- */
+$place
+    ->setLatitude(45.548);
+    ->setLongitude(1.897);
+    ->reverse();
+
+$address = $place->getAddress();
+$zipCode = $place->getZipCode();
+$city    = $place->getCity();
+
 ```
 
 ## Get altitude from coordinates
 uses OpenTopoData APi. See https://www.opentopodata.org/ for details and restrictions
 ```PHP
-    $altimeter = new \Francoisvaillant\Geolocator\Altimeter(44.22, -0.59);
-    $altimeter->getAltitude();
-/*
- This returns an integer for altitude in meters or null (example returns 98m)
- */
+$place
+    ->setLatitude(45.548);
+    ->setLongitude(1.897);
+    ->findAltitude()
+    ->getAltitude();
+
 ```
+
+## What you can get :
+Once you hydrate totaly your Place whith ->geolocate() or ->reverse() (alltitude is a bit different),
+you'll be able to get all the above informations :
+
+    - city
+    - zipCode
+    - address
+    - inseeCode
+    - department code
+    - departement name
+    - region name
+    - latitude and longitude (degrees)
+    - latitude and longitude (lambert93)
 

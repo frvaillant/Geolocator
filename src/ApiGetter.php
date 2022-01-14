@@ -5,7 +5,7 @@ namespace Francoisvaillant\Geolocator;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-abstract class AbstractApiGetter
+class ApiGetter
 {
     const HEADERS   = [
         'Content-Type'  => 'application/x-www-form-urlencoded',
@@ -22,20 +22,26 @@ abstract class AbstractApiGetter
      */
     protected HttpClientInterface $client;
 
+
+
     public function __construct()
     {
         $this->client = HttpClient::create();
     }
 
-    /**
-     * @param $url
-     * @return array|null
-     * @throws \Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface
-     * @throws \Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface
-     * @throws \Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface
-     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
-     *
-     */
+    public function getData($url)
+    {
+        try {
+            $data = $this->request($url);
+            if(isset($data['features']) && isset($data['features'][0])) {
+                return array_merge($data['features'][0]['geometry']['coordinates'], $data['features'][0]['properties']);
+            }
+            return false;
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
+
     protected function request($url): ?array
     {
         $response = $this->client->request('GET', $url, [
@@ -45,16 +51,6 @@ abstract class AbstractApiGetter
             return json_decode($response->getContent(), true);
         }
         return null;
-    }
-
-    /**
-     * @return \Exception
-     *
-     * get Request Exceptions if needed
-     */
-    public function getError(): \Exception
-    {
-        return $this->error;
     }
 
 }

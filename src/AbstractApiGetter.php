@@ -35,15 +35,16 @@ abstract class AbstractApiGetter
      * @throws \Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface
      * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
      *
-     * Get coordinates from address using Open Data French Government Api
      */
     protected function request($url): ?array
     {
         $response = $this->client->request('GET', $url, [
             'headers' => self::HEADERS
         ]);
-
-        return json_decode($response->getContent(), true);
+        if($response) {
+            return json_decode($response->getContent(), true);
+        }
+        return null;
     }
 
     /**

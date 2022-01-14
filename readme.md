@@ -39,3 +39,13 @@ this returns an array like
     ]
  */
 ```
+
+## Get altitude from coordinates
+uses OpenTopoData APi. See https://www.opentopodata.org/ for details and restrictions
+```PHP
+    $altimeter = new \Francoisvaillant\Geolocator\Altimeter(44.22, -0.59);
+    $altimeter->getAltitude();
+/*
+ This returns an integer for altitude in meters or null (example returns 98m)
+ */
+```

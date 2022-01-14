@@ -6,44 +6,33 @@ namespace Francoisvaillant\Geolocator;
 use Symfony\Component\HttpClient\HttpClient;
 use \Symfony\Contracts\HttpClient\HttpClientInterface;
 
-class Geolocator
+class Geolocator extends AbstractApiGetter
 {
     private float $latitude;
     private float $longitude;
     private $apiUrl = 'https://api-adresse.data.gouv.fr/search/?q=%s';
-    const HEADERS   = [
-        'Content-Type'  => 'application/x-www-form-urlencoded',
-        'User-Agent' => 'Symfony HttpClient/Curl'
-    ];
 
     /**
      * @var array|null
      */
     private $coordinates;
 
-    /**
-     * @var \Exception
-     */
-    private ?\Exception $error = null;
 
-    /**
-     * @var HttpClientInterface
-     */
-    private HttpClientInterface $client;
-
-    public function __construct($apiUrl = null)
+    public function __construct()
     {
-        $this->client = HttpClient::create();
-
-        if($apiUrl) {
-            $this->apiUrl = $apiUrl;
-        }
+        parent::__construct();
     }
 
+    /**
+     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface
+     */
     public function geoLocate($address): self
     {
         $url = sprintf($this->apiUrl, urlencode($address));
-        $this->coordinates = $this->request($url);
+        $this->coordinates = $this->getCoordinatesInResponse($url);
         return $this;
     }
 
@@ -54,36 +43,19 @@ class Geolocator
      * @throws \Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface
      * @throws \Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface
      * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
-     *
-     * Get coordinates from address using Open Data French Government Api
      */
-    private function request($url): ?array
+    private function getCoordinatesInResponse($url): ?array
     {
         $coordinates = null;
 
         try {
-            $response = $this->client->request('GET', $url, [
-                'headers' => self::HEADERS
-            ]);
-
-            $data = json_decode($response->getContent(), true);
-
+            $data = $this->request($this->apiUrl);
             $coordinates = $data['features'][0]['geometry']['coordinates'];
         } catch (\Exception $e) {
             $this->error = $e;
         }
 
         return $coordinates;
-    }
-
-    /**
-     * @return \Exception
-     *
-     * get Request Exceptions if needed
-     */
-    public function getError(): \Exception
-    {
-        return $this->error;
     }
 
     /**

@@ -1,6 +1,6 @@
 #Geolocator
 
-Geolocator is a simple class using opend data API
+Geolocator is a simple class using open data API
 https://adresse.data.gouv.fr/api-doc/adresse
 
 ##Setup
@@ -8,20 +8,34 @@ https://adresse.data.gouv.fr/api-doc/adresse
 composer require francoisvaillant/geolocator
 ```
 
-##Instantiate class
-```PHP
-$geolocator = new \Francoisvaillant\Geolocator\Geolocator();
-```
+##Get Coordinates from address
 
-##Geolocate address
 ```PHP
-$geolocator  = new \Francoisvaillant\Geolocator\Geolocator();
-$address     = '255 rue Saint-Catherine, 33000 Bordeaux';
-$coordinates = $geolocator->geoLocate($address)->getCoordinates();
-/**
-* returns ['latitude' => 44.832251, 'longitude' => -0.572988]
-*/
+$coordinator = new francoisvaillant\geolocator\Coordinator('116 avenue du Président Kennedy','PARIS', 75016);
+$coordinates = $coordinator->getCoordinates();
+/*
+this returns an array like
+    [
+        "latitude"  => 48.852149,
+        "longitude" => 2.279529,
+    ]
+ */
 ```
 
 ##Get address from coordinates
-On the way
+```PHP
+$PlaceInformator = new francoisvaillant\geolocator\PlaceInformator([2.279529, 48.852149]);
+$placeInformations = $PlaceInformator->getCityInfos();
+/*
+this returns an array like
+    [
+    "address" => "116 Avenue du Président Kennedy",
+    "postCode" => "75016",
+    "city" => "Paris",
+    "inseeCode" => "75116",
+    "departmentCode" => "75",
+    "departmentName" => "Paris",
+    "regionName" => "Île-de-France",
+    ]
+ */
+```

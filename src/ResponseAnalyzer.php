@@ -25,7 +25,7 @@ class ResponseAnalyzer
         }
         foreach ($data['features'] as $datum) {
             $placeCity = str_replace('-', ' ', strtoupper($this->place->getCity()));
-            $city = str_replace('-', ' ', strtoupper($datum['properties']['city']));
+            $city      = str_replace('-', ' ', strtoupper($datum['properties']['city']));
             if ($city === $placeCity || $this->isSimilar($placeCity, $city)) {
                 return array_merge($datum['geometry']['coordinates'], $datum['properties']);
             }

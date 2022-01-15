@@ -50,7 +50,6 @@ $place
     ->setLongitude(1.897);
     ->findAltitude() // NULL if failed
     ->getAltitude();
-
 ```
 
 ## What you can get :

@@ -37,21 +37,6 @@ class Altimeter extends ApiGetter
         $this->longitude = $longitude;
 
         parent::__construct();
-
-    }
-
-    /**
-     * @param $url
-     *
-     * url must be ready for sprintf : 'http://your-api-address/?locations?%s,%s'
-     * first %s is for latitude, second for longitude
-     */
-    public function setUrl($url)
-    {
-        if(!filter_var($url, FILTER_VALIDATE_URL)) {
-            throw new \Exception('The URL provided seems not to be a valid URL');
-        }
-        $this->url = $url;
     }
 
     /**

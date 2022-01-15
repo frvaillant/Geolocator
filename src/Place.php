@@ -14,6 +14,9 @@ class Place
     /** @var string */
     private $address = null;
 
+    /** @var string */
+    private $streetName = null;
+
     /** @var int */
     private $zipCode = null;
 
@@ -65,8 +68,10 @@ class Place
         'city' => 'city',
         'x' => 'lambertX',
         'y' => 'lambertY',
-        'context' => 'context'
+        'context' => 'context',
+        'street' => 'streetName'
     ];
+
     private ResponseAnalyzer $analyzer;
 
     public function setContext($context): void
@@ -136,6 +141,8 @@ class Place
         return $this;
     }
 
+
+
     /**
      * @return array
      */
@@ -169,6 +176,24 @@ class Place
         $this->address = $address;
         return $this;
     }
+
+    /**
+     * @return string
+     */
+    public function getStreetName(): ?string
+    {
+        return $this->streetName;
+    }
+
+    /**
+     * @param string $streetName
+     */
+    public function setStreetName(?string $streetName): void
+    {
+        $this->streetName = $streetName;
+    }
+
+
 
     /**
      * @return int

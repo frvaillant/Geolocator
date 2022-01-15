@@ -24,11 +24,18 @@ class ResponseAnalyzer
             return array_merge($data['features'][0]['geometry']['coordinates'], $data['features'][0]['properties']);
         }
         foreach ($data['features'] as $datum) {
-            if (strtoupper($datum['properties']['city']) === strtoupper($this->place->getCity())) {
+            $placeCity = str_replace('-', ' ', strtoupper($this->place->getCity()));
+            $city = str_replace('-', ' ', strtoupper($datum['properties']['city']));
+            if ($city === $placeCity || $this->isSimilar($placeCity, $city)) {
                 return array_merge($datum['geometry']['coordinates'], $datum['properties']);
             }
         }
         return null;
+    }
+
+    private function isSimilar($city1, $city2)
+    {
+        return similar_text($city1, $city2);
     }
 
 }

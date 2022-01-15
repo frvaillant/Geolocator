@@ -26,6 +26,8 @@ $latitude  = $place->getLatitude();  // NULL if geolocation failed
 $longitude = $place->getLongitude(); // NULL if geolocation failed
 
 ```
+If Geolocation returns multiple results, We use city name to filter results. 
+Geolocator uses similar_text() so you can consider that 'Bourg la reine' equals to 'Bourg-la-Reine'. 
 
 ## Get address from coordinates
 ```PHP

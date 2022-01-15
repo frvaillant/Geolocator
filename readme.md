@@ -19,11 +19,11 @@ $place = new \Francoisvaillant\Geolocator\Place()
 $place
     ->setAddress('your address');
     ->setCity('city name');
-    ->setZipCode(00000); // optionnal but recommended
+    ->setZipCode(00000); // optionnal
     ->geolocate();
 
-$latitude  = $place->getLatitude();
-$longitude = $place->getLongitude();
+$latitude  = $place->getLatitude();  // NULL if geolocation failed
+$longitude = $place->getLongitude(); // NULL if geolocation failed
 
 ```
 
@@ -34,9 +34,9 @@ $place
     ->setLongitude(1.897);
     ->reverse();
 
-$address = $place->getAddress();
-$zipCode = $place->getZipCode();
-$city    = $place->getCity();
+$address = $place->getAddress(); // NULL if reverse failed
+$zipCode = $place->getZipCode(); // NULL if reverse failed
+$city    = $place->getCity();    // NULL if reverse failed
 
 ```
 
@@ -46,7 +46,7 @@ uses OpenTopoData APi. See https://www.opentopodata.org/ for details and restric
 $place
     ->setLatitude(45.548);
     ->setLongitude(1.897);
-    ->findAltitude()
+    ->findAltitude() // NULL if failed
     ->getAltitude();
 
 ```

@@ -48,7 +48,7 @@ class Place
     private $altitude = null;
 
     /** @var string  */
-    protected $geolocateUrl = 'https://api-adresse.data.gouv.fr/search/?q=%s&city=%s&postcode=%s';
+    protected $geolocateUrl = 'https://api-adresse.data.gouv.fr/search/?q=%s&postcode=%s';
 
     /** @var string  */
     protected $reverseUrl  = 'https://api-adresse.data.gouv.fr/reverse/?lon=%f&lat=%f';
@@ -67,6 +67,7 @@ class Place
         'y' => 'lambertY',
         'context' => 'context'
     ];
+    private ResponseAnalyzer $analyzer;
 
     public function setContext($context): void
     {
@@ -81,13 +82,15 @@ class Place
     public function __construct()
     {
         $this->dataGetter = new ApiGetter();
+        $this->analyzer   = new ResponseAnalyzer($this);
     }
 
     public function geolocate(): self
     {
         if ($this->address && $this->city) {
-            $url  = sprintf($this->geolocateUrl, $this->address, $this->city, $this->zipCode);
+            $url  = sprintf($this->geolocateUrl, $this->address, $this->zipCode);
             $data = $this->dataGetter->getData($url);
+            $data = $this->analyzer->filterData($data);
             if($data) {
                 $this->hydrate($data);
             }
@@ -100,6 +103,7 @@ class Place
         if ($this->latitude && $this->longitude) {
             $url  = sprintf($this->reverseUrl, $this->longitude, $this->latitude);
             $data = $this->dataGetter->getData($url);
+            $data = $this->analyzer->filterData($data);
             if($data) {
                 $this->hydrate($data);
             }

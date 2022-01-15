@@ -31,10 +31,11 @@ class ApiGetter
 
     public function getData($url)
     {
+
         try {
             $data = $this->request($url);
             if(isset($data['features']) && isset($data['features'][0])) {
-                return array_merge($data['features'][0]['geometry']['coordinates'], $data['features'][0]['properties']);
+                return $data;
             }
             return false;
         } catch (\Exception $e) {

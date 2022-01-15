@@ -95,9 +95,11 @@ class Place
         if ($this->address && $this->city) {
             $url  = sprintf($this->geolocateUrl, $this->address, $this->zipCode);
             $data = $this->dataGetter->getData($url);
-            $data = $this->analyzer->filterData($data);
-            if($data) {
-                $this->hydrate($data);
+            if(isset($data['features']) && isset($data['features'][0])) {
+                $data = $this->analyzer->filterData($data);
+                if ($data) {
+                    $this->hydrate($data);
+                }
             }
         }
         return $this;
@@ -108,9 +110,11 @@ class Place
         if ($this->latitude && $this->longitude) {
             $url  = sprintf($this->reverseUrl, $this->longitude, $this->latitude);
             $data = $this->dataGetter->getData($url);
-            $data = $this->analyzer->filterData($data);
-            if($data) {
-                $this->hydrate($data);
+            if(isset($data['features']) && isset($data['features'][0])) {
+                $data = $this->analyzer->filterData($data);
+                if ($data) {
+                    $this->hydrate($data);
+                }
             }
         }
         return $this;

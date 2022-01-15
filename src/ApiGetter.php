@@ -34,10 +34,8 @@ class ApiGetter
 
         try {
             $data = $this->request($url);
-            if(isset($data['features']) && isset($data['features'][0])) {
-                return $data;
-            }
-            return false;
+            return $data;
+
         } catch (\Exception $e) {
             return false;
         }

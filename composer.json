@@ -1,6 +1,6 @@
 {
     "name": "francoisvaillant/geolocator",
-    "description": "A simple class using french government API to geolocate Addresses",
+    "description": "Geolocator is a simple tool to geolocate address or reverse. It is also capable to determinate altitude.",
     "license": "MIT",
     "autoload": {
         "psr-4": {

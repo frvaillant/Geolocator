@@ -2,14 +2,12 @@
 
 namespace Francoisvaillant\Geolocator;
 
+use Francoisvaillant\Geolocator\Providers\AbstractProvider;
+use Francoisvaillant\Geolocator\Providers\AltitudeProvider;
+use Francoisvaillant\Geolocator\Providers\DefaultProvider;
+
 class Place
 {
-
-    /** @var array */
-    private $coordinates = null;
-
-    /** @var array */
-    private $properties = null;
 
     /** @var string */
     private $address = null;
@@ -50,119 +48,43 @@ class Place
     /** @var int */
     private $altitude = null;
 
-    /** @var string  */
-    protected $geolocateUrl = 'https://api-adresse.data.gouv.fr/search/?q=%s&postcode=%s';
+    /** @var AbstractProvider */
+    private $provider;
 
-    /** @var string  */
-    protected $reverseUrl  = 'https://api-adresse.data.gouv.fr/reverse/?lon=%f&lat=%f';
+    /** @var AltitudeProvider  */
+    private $altitudeProvider;
 
-    /** @var ApiGetter  */
-    private $dataGetter;
 
-    const TRANSLATOR = [
-        0 => 'longitude',
-        1 => 'latitude',
-        'name' => 'address',
-        'postcode' => 'zipCode',
-        'citycode' => 'inseeCode',
-        'city' => 'city',
-        'x' => 'lambertX',
-        'y' => 'lambertY',
-        'context' => 'context',
-        'street' => 'streetName'
-    ];
-
-    private ResponseAnalyzer $analyzer;
-
-    public function setContext($context): void
+    public function __construct($provider = DefaultProvider::class)
     {
-        if($context) {
-            list($departmentCode, $departmentName, $regionName) = explode (', ', $context);
-            $this->setDepartmentCode($departmentCode);
-            $this->setDepartmentName($departmentName);
-            $this->setRegionName($regionName);
-        }
+        $this->provider = new $provider($this);
+
+        $this->altitudeProvider = $altitudeProvider ?? new AltitudeProvider();
     }
 
-    public function __construct()
+    public function setAltitudeProvider(AltitudeProvider $altitudeProvider): self
     {
-        $this->dataGetter = new ApiGetter();
-        $this->analyzer   = new ResponseAnalyzer($this);
-    }
+        $this->altitudeProvider = $altitudeProvider;
 
-    public function geolocate(): self
-    {
-        if ($this->address && $this->city) {
-            $url  = sprintf($this->geolocateUrl, $this->address, $this->zipCode);
-            $data = $this->dataGetter->getData($url);
-            if(isset($data['features']) && isset($data['features'][0])) {
-                $data = $this->analyzer->filterData($data);
-                if ($data) {
-                    $this->hydrate($data);
-                }
-            }
-        }
         return $this;
     }
 
-    public function reverse(): self
+    public function geolocate(): bool
     {
-        if ($this->latitude && $this->longitude) {
-            $url  = sprintf($this->reverseUrl, $this->longitude, $this->latitude);
-            $data = $this->dataGetter->getData($url);
-            if(isset($data['features']) && isset($data['features'][0])) {
-                $data = $this->analyzer->filterData($data);
-                if ($data) {
-                    $this->hydrate($data);
-                }
-            }
+        if($this->getAddress() && ($this->getCity() || $this->getZipCode())) {
+            return $this->provider->geolocate($this->getAddress(), $this->getCity(), $this->getZipCode());
         }
-        return $this;
+        return false;
     }
 
-    private function hydrate($data)
+    public function reverse(): bool
     {
-        foreach (self::TRANSLATOR as $sourceKey => $targetKey) {
-            $getter = 'set' . ucfirst($targetKey);
-            $this->{$getter}($data[$sourceKey]);
+        if($this->getLatitude() && $this->getLongitude()) {
+            return $this->provider->reverse($this->getLatitude(), $this->getLongitude());
         }
+        return false;
     }
 
-    /**
-     * @return array
-     */
-    public function getCoordinates(): ?array
-    {
-        return $this->coordinates;
-    }
-
-    /**
-     * @param array $coordinates
-     */
-    public function setCoordinates(array $coordinates): self
-    {
-        $this->coordinates = $coordinates;
-        return $this;
-    }
-
-
-
-    /**
-     * @return array
-     */
-    public function getProperties(): ?array
-    {
-        return $this->properties;
-    }
-
-    /**
-     * @param array $properties
-     */
-    public function setProperties(array $properties): self
-    {
-        $this->properties = $properties;
-        return $this;
-    }
 
     /**
      * @return string
@@ -192,17 +114,17 @@ class Place
     /**
      * @param string $streetName
      */
-    public function setStreetName(?string $streetName): void
+    public function setStreetName(?string $streetName): self
     {
         $this->streetName = $streetName;
+        return $this;
     }
 
 
-
     /**
-     * @return int
+     * @return string|int
      */
-    public function getZipCode(): ?int
+    public function getZipCode(): string | int
     {
         return $this->zipCode;
     }
@@ -210,7 +132,7 @@ class Place
     /**
      * @param int $zipCode
      */
-    public function setZipCode(int $zipCode): self
+    public function setZipCode($zipCode): self
     {
         $this->zipCode = $zipCode;
         return $this;
@@ -341,8 +263,7 @@ class Place
     public function findAltitude(): ?self
     {
         if ($this->latitude && $this->longitude) {
-            $altimeter = new Altimeter($this->latitude, $this->longitude);
-            $this->altitude = $altimeter->getAltitude();
+            $this->altitude = $this->altitudeProvider->findAltitude($this->latitude, $this->longitude);
             return $this;
         }
         return null;

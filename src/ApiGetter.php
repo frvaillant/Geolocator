@@ -5,21 +5,23 @@ namespace Francoisvaillant\Geolocator;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-class ApiGetter
+Abstract class ApiGetter
 {
     const HEADERS   = [
         'Content-Type'  => 'application/x-www-form-urlencoded',
         'User-Agent' => 'Symfony HttpClient/Curl'
     ];
 
-    /**
-     * @var \Exception
-     */
+    /** @var string */
+    protected $REVERSE_URL;
+
+    /** @var string */
+    protected $GEOCODE_URL;
+
+    /** @var \Exception|null  */
     protected ?\Exception $error = null;
 
-    /**
-     * @var HttpClientInterface
-     */
+    /** @var HttpClientInterface  */
     protected HttpClientInterface $client;
 
 
@@ -29,17 +31,26 @@ class ApiGetter
         $this->client = HttpClient::create();
     }
 
-    public function getData($url)
+    public function getData($url): ?array
     {
-
         try {
             $data = $this->request($url);
             return $data;
-
         } catch (\Exception $e) {
-            return false;
+            return null;
         }
     }
+
+    protected function makeGeocodeUrl(string $address, string $city, $zipCode): string
+    {
+        return sprintf($this->GEOCODE_URL, $address, $city, $zipCode);
+    }
+
+    protected function makeReverseUrl(float $latitude, float $longitude): string
+    {
+        return sprintf($this->REVERSE_URL, $latitude, $longitude);
+    }
+
 
     protected function request($url): ?array
     {

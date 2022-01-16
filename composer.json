@@ -1,6 +1,6 @@
 {
     "name": "francoisvaillant/geolocator",
-    "description": "Geolocator is a simple tool to geolocate address or reverse. It is also capable to determinate altitude.",
+    "description": "Geolocator is a simple tool to geolocate address or reverse. It is also able to determinate altitude.",
     "license": "MIT",
     "autoload": {
         "psr-4": {

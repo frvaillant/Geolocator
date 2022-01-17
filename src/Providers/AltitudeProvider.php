@@ -55,15 +55,4 @@ class AltitudeProvider extends ApiGetter
         }
         return null;
     }
-
-    /**
-     * @param $url
-     */
-    public function setUrl($url): void
-    {
-        $this->url = $url;
-    }
-
-
-
 }

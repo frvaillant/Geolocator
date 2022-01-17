@@ -317,6 +317,12 @@ class Place
         return $this->provider;
     }
 
+    /** @return ApiGetter */
+    public function getAltitudeProvider()
+    {
+        return $this->altitudeProvider;
+    }
+
 
 
 

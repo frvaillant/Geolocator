@@ -94,3 +94,22 @@ Note that the geolocate() and reverse() return true or false if succeed or not. 
         // ...
     }
 ```
+
+If you want to check all the response from Api after geolocate(), reverse() or findAltitude() :
+```PHP
+$place
+    //...
+    ->geolocate();
+$place->getProvider()->getResponseData();
+
+$place
+    //...
+    ->reverse();
+$place->getProvider()->getResponseData();
+
+$place
+    //...
+    ->findAltitude();
+$place->getAltitudeProvider()->getResponseData();
+
+```

@@ -97,7 +97,7 @@ class Place
     /**
      * @param string $address
      */
-    public function setAddress(string $address): self
+    public function setAddress(?string $address): self
     {
         $this->address = $address;
         return $this;
@@ -124,7 +124,7 @@ class Place
     /**
      * @return string|int
      */
-    public function getZipCode(): string | int
+    public function getZipCode()
     {
         return $this->zipCode;
     }
@@ -149,7 +149,7 @@ class Place
     /**
      * @param int $inseeCode
      */
-    public function setInseeCode(int $inseeCode): self
+    public function setInseeCode(?int $inseeCode): self
     {
         $this->inseeCode = $inseeCode;
         return $this;
@@ -166,7 +166,7 @@ class Place
     /**
      * @param string $city
      */
-    public function setCity(string $city): self
+    public function setCity(?string $city): self
     {
         $this->city = $city;
         return $this;
@@ -183,7 +183,7 @@ class Place
     /**
      * @param string $departmentCode
      */
-    public function setDepartmentCode(string $departmentCode): self
+    public function setDepartmentCode(?string $departmentCode): self
     {
         $this->departmentCode = $departmentCode;
         return $this;
@@ -200,7 +200,7 @@ class Place
     /**
      * @param string $departmentName
      */
-    public function setDepartmentName(string $departmentName): self
+    public function setDepartmentName(?string $departmentName): self
     {
         $this->departmentName = $departmentName;
         return $this;
@@ -217,7 +217,7 @@ class Place
     /**
      * @param string $regionName
      */
-    public function setRegionName(string $regionName): self
+    public function setRegionName(?string $regionName): self
     {
         $this->regionName = $regionName;
         return $this;
@@ -234,7 +234,7 @@ class Place
     /**
      * @param float $latitude
      */
-    public function setLatitude(float $latitude): self
+    public function setLatitude(?float $latitude): self
     {
         $this->latitude = $latitude;
         return $this;
@@ -251,7 +251,7 @@ class Place
     /**
      * @param float $longitude
      */
-    public function setLongitude(float $longitude): self
+    public function setLongitude(?float $longitude): self
     {
         $this->longitude = $longitude;
         return $this;
@@ -286,7 +286,7 @@ class Place
     /**
      * @param int $lambertX
      */
-    public function setLambertX(int $lambertX): self
+    public function setLambertX(?int $lambertX): self
     {
         $this->lambertX = $lambertX;
         return $this;
@@ -303,11 +303,21 @@ class Place
     /**
      * @param int $lambertY
      */
-    public function setLambertY(int $lambertY): self
+    public function setLambertY(?int $lambertY): self
     {
         $this->lambertY = $lambertY;
         return $this;
     }
+
+    /**
+     * @return AbstractProvider
+     */
+    public function getProvider(): AbstractProvider
+    {
+        return $this->provider;
+    }
+
+
 
 
 

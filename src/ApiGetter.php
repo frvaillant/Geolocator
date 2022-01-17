@@ -24,6 +24,8 @@ Abstract class ApiGetter
     /** @var HttpClientInterface  */
     protected HttpClientInterface $client;
 
+    /** @var array | null */
+    private $responseData = null;
 
 
     public function __construct()
@@ -58,9 +60,20 @@ Abstract class ApiGetter
             'headers' => self::HEADERS
         ]);
         if($response) {
-            return json_decode($response->getContent(), true);
+            $this->responseData = json_decode($response->getContent(), true);
+            return $this->responseData;
         }
         return null;
     }
+
+    /**
+     * @return array|null
+     */
+    public function getResponseData(): ?array
+    {
+        return $this->responseData;
+    }
+
+
 
 }

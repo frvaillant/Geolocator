@@ -8,7 +8,9 @@ use Francoisvaillant\Geolocator\Providers\DefaultProvider;
 
 class Place
 {
-
+    
+    private $allData = null;
+    
     /** @var string */
     private $address = null;
 
@@ -61,6 +63,24 @@ class Place
 
         $this->altitudeProvider = $altitudeProvider ?? new AltitudeProvider();
     }
+
+    /**
+     * @return null
+     */
+    public function getAllData()
+    {
+        return $this->allData;
+    }
+
+    /**
+     * @param null $allData
+     */
+    public function setAllData($allData): void
+    {
+        $this->allData = $allData;
+    }
+    
+    
 
     public function setAltitudeProvider(AltitudeProvider $altitudeProvider): self
     {

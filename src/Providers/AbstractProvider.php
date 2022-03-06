@@ -25,12 +25,14 @@ abstract class AbstractProvider extends ApiGetter
     public function geolocate(string $address, string $city, $zipCode): bool
     {
         $data = $this->getData($this->makeGeocodeUrl($address, $city, $zipCode));
+        $this->place->setAllData($data);
         return $this->hydrate($this->analyzer->formatData($data));
     }
 
     public function reverse(float $latitude, float $longitude): bool
     {
         $data = $this->getData($this->makeReverseUrl($latitude, $longitude));
+        $this->place->setAllData($data);
         return $this->hydrate($this->analyzer->formatData($data));
     }
 

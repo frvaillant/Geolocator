@@ -323,8 +323,4 @@ class Place
         return $this->altitudeProvider;
     }
 
-
-
-
-
 }

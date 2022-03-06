@@ -3,6 +3,7 @@
 namespace Francoisvaillant\Geolocator;
 
 use Symfony\Component\HttpClient\HttpClient;
+use Symfony\Component\HttpClient\RetryableHttpClient;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 Abstract class ApiGetter

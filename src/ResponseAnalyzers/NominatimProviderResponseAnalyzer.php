@@ -21,6 +21,7 @@ class NominatimProviderResponseAnalyzer implements ResponseAnalyzerInterface
             return [
                 'city'           => $datum['address']['city'] ?? $datum['address']['village'] ?? $datum['address']['town'] ?? $datum['address']['municipality'] ?? null,
                 'zipCode'        => $datum['address']['postcode'] ?? null,
+                'inseeCode'      => $datum['extratags']['ref:INSEE'] ?? null,
                 'latitude'       => $datum['lat'] ?? null,
                 'longitude'      => $datum['lon'] ?? null,
                 'streetName'     => $datum['address']['road'] ?? null,
